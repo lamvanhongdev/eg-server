@@ -14,6 +14,10 @@ const WordSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
     sound: {
       type: String,
       required: true,

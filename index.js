@@ -23,6 +23,10 @@ app.use("/api/albums/", albumRoute);
 const songRoute = require("./routes/songs");
 app.use("/api/songs/", songRoute);
 
+// word link
+const wordRoute = require("./routes/word");
+app.use("/api/words/", wordRoute);
+
 // If any depreciation warning add depreciation options
 // mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true }, () => {
 //   console.log("Mongodb Connected");
