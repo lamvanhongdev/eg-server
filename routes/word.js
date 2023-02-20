@@ -20,7 +20,8 @@ router.get("/getAll", async (req, res) => {
 });
 
 router.get("/learning", async (req, res) => {
-  const cursor = await word.find().sort({ datefield: 1 }).limit(4);
+  //const cursor = await word.find().sort({ datefield: 1 }).limit(4);
+  const cursor = await word.aggregate([{ $sample: { size: 4 } }]);
 
   const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
   if (cursor) {
