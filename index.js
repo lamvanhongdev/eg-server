@@ -27,6 +27,10 @@ app.use("/api/songs/", songRoute);
 const wordRoute = require("./routes/word");
 app.use("/api/words/", wordRoute);
 
+// learn word link
+const learnWordRoute = require("./routes/learnWord");
+app.use("/api/learnwords/", learnWordRoute);
+
 // If any depreciation warning add depreciation options
 // mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true }, () => {
 //   console.log("Mongodb Connected");
