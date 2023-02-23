@@ -1,4 +1,5 @@
 const word = require("../models/word");
+const LearnWord = require("../models/learnWord");
 
 const router = require("express").Router();
 
@@ -34,6 +35,44 @@ router.get("/learning", async (req, res) => {
     res.status(200).json({
       success: true,
       msg: "No data found",
+    });
+  }
+});
+
+router.get("/getlearning", async (req, res) => {
+  // req include: userid,maxWord
+  try {
+    if (req.body.userId == null)
+      return res.status(401).json({
+        success: false,
+        msg: "missing userID",
+      });
+    if (!req.body.maxWord) {
+      req.body.maxWord = 6;
+    }
+    const allWord = await word.find();
+    const learnWords = [];
+    for (var i = 0; i < allWord.length; i++) {
+      if (learnWords.length >= req.body.maxWord) break;
+      const currWord = await LearnWord.findOne({
+        word: allWord[i]._id,
+        user: req.body.userId,
+      });
+      if (!currWord) {
+        learnWords.push({
+          word: allWord[i],
+          learnWord: currWord,
+        });
+      }
+    }
+    return res.status(200).json({
+      success: true,
+      data: learnWords,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: err,
     });
   }
 });

@@ -27,6 +27,31 @@ router.get("/login", async (req, res) => {
   }
 });
 
+router.delete("/delete/:id", async (req, res) => {
+  const filter = { _id: req.params.id };
+
+  try {
+    const result = await user.deleteOne(filter);
+    if (result.deletedCount == 1) {
+      res.status(200).json({
+        success: true,
+        msg: "data deleted",
+        result,
+      });
+    } else {
+      res.status(200).json({
+        sucess: false,
+        msg: "data not found",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      msg: err,
+    });
+  }
+});
+
 router.get("/mobilelogin", async (req, res) => {
   try {
     const userExits = await user.findOne({ user_id: req.body.user_id });
