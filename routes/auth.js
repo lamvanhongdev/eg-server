@@ -27,6 +27,43 @@ router.get("/login", async (req, res) => {
   }
 });
 
+router.get("/mobilelogin", async (req, res) => {
+  try {
+    const userExits = await user.findOne({ user_id: req.body.user_id });
+    if (!userExits) {
+      const newUser = new user({
+        name: req.body.name,
+        email: req.body.email,
+        imageURL: req.body.imageUrl,
+        user_id: req.body.user_id,
+        email_verfied: req.body.email_verified,
+        role: "member",
+        auth_time: req.body.auth_time,
+      });
+      const savedUser = await newUser.save();
+      if (savedUser) {
+        return res.status(200).json({
+          success: true,
+          msg: "Create user successfully",
+          data: savedUser,
+        });
+      }
+    } else {
+      res.status(200).json({
+        success: true,
+        msg: "login successfully",
+        data: userExits,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      msg: err,
+    });
+  }
+});
+
 router.put("/favourites/:userId", async (req, res) => {
   const filter = { _id: req.params.userId };
   const songId = req.query;
