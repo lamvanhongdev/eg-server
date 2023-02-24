@@ -50,6 +50,7 @@ router.get("/getlearning", async (req, res) => {
     if (!req.body.maxWord) {
       req.body.maxWord = 6;
     }
+    const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
     const allWord = await word.find();
     const learnWords = [];
     for (var i = 0; i < allWord.length; i++) {
@@ -68,6 +69,7 @@ router.get("/getlearning", async (req, res) => {
     return res.status(200).json({
       success: true,
       data: learnWords,
+      randomWord: randomCursor,
     });
   } catch (err) {
     return res.status(500).json({
