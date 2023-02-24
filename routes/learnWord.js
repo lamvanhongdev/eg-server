@@ -45,6 +45,30 @@ router.get("/getword", async (req, res) => {
   }
 });
 
+router.get("/numOfLearnWord", async (req, res) => {
+  try {
+    const cursor = await LearnWord.find({
+      user: req.body.userId,
+    });
+    const allword = await word.find();
+    if (cursor) {
+      return res.status(200).json({
+        success: true,
+        numLearned: cursor.length,
+        totalWord: allword.length,
+      });
+    } else
+      return res.status(200).json({
+        success: false,
+        numLearned: 0,
+      });
+  } catch (err) {
+    return res.status(500).json({
+      msg: err,
+    });
+  }
+});
+
 router.get("/getpractice", async (req, res) => {
   // req include: userid,maxWord
   try {
