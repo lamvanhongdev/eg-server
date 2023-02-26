@@ -52,7 +52,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-router.get("/mobilelogin", async (req, res) => {
+router.post("/mobilelogin", async (req, res) => {
   try {
     const userExits = await user.findOne({ user_id: req.body.user_id });
     if (!userExits) {

@@ -45,7 +45,7 @@ router.get("/getword", async (req, res) => {
   }
 });
 
-router.get("/numOfLearnWord", async (req, res) => {
+router.post("/numOfLearnWord", async (req, res) => {
   try {
     const cursor = await LearnWord.find({
       user: req.body.userId,
@@ -69,7 +69,7 @@ router.get("/numOfLearnWord", async (req, res) => {
   }
 });
 
-router.get("/getpractice", async (req, res) => {
+router.post("/getpractice", async (req, res) => {
   // req include: userid,maxWord
   try {
     if (req.body.userId == null)

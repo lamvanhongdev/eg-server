@@ -39,7 +39,7 @@ router.get("/learning", async (req, res) => {
   }
 });
 
-router.get("/getlearning", async (req, res) => {
+router.post("/getlearning", async (req, res) => {
   // req include: userid,maxWord
   try {
     if (req.body.userId == null)
