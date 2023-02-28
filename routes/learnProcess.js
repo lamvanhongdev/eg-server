@@ -15,13 +15,13 @@ router.get("/getLeaderBoard/:typeLeader", async (req, res) => {
 
     var cursor = {};
     if (req.params.typeLeader == "day") {
-      cursor = await learnProcess.find(filter).sort({ dayExp: 1 }).limit(20);
+      cursor = await learnProcess.find(filter).sort({ dayExp: -1 }).limit(20);
     }
     if (req.params.typeLeader == "week") {
-      cursor = await learnProcess.find(filter).sort({ weekExp: 1 }).limit(20);
+      cursor = await learnProcess.find(filter).sort({ weekExp: -1 }).limit(20);
     }
     if (req.params.typeLeader == "total") {
-      cursor = await learnProcess.find(filter).sort({ totalExp: 1 }).limit(20);
+      cursor = await learnProcess.find(filter).sort({ totalExp: -1 }).limit(20);
     }
 
     const resultData = [];
