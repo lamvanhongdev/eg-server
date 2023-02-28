@@ -9,7 +9,7 @@ const {
 
 const router = require("express").Router();
 
-router.get("/getLeaderBoard/:typeLeader", async (req, res) => {
+router.post("/getLeaderBoard/:typeLeader", async (req, res) => {
   try {
     const filter = { lastDay, lastWeek };
 
