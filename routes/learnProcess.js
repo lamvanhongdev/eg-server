@@ -1,4 +1,5 @@
 const learnProcess = require("../models/learnProcess");
+const user = require("../models/user");
 const {
   lastDay,
   lastWeek,
@@ -23,9 +24,21 @@ router.get("/getLeaderBoard/:typeLeader", async (req, res) => {
       cursor = await learnProcess.find(filter).sort({ totalExp: 1 }).limit(20);
     }
 
+    const resultData = [];
+    for (var i = 0; i < cursor.length; i++) {
+      const currUser = await user.findOne({ _id: cursor[i].user });
+      const currData = {
+        ...cursor[i]._doc,
+        imageUrl: currUser.imageURL,
+        name: currUser.name,
+      };
+
+      resultData.push(currData);
+    }
+
     return res.status(200).json({
       success: true,
-      data: cursor,
+      data: resultData,
     });
   } catch (err) {
     return res.status(500).json({
