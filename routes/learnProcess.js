@@ -11,16 +11,17 @@ const router = require("express").Router();
 
 router.post("/getLeaderBoard/:typeLeader", async (req, res) => {
   try {
-    const filter = { lastDay, lastWeek };
-
     var cursor = {};
     if (req.params.typeLeader == "day") {
+      const filter = { lastDay };
       cursor = await learnProcess.find(filter).sort({ dayExp: -1 }).limit(20);
     }
     if (req.params.typeLeader == "week") {
+      const filter = { lastWeek };
       cursor = await learnProcess.find(filter).sort({ weekExp: -1 }).limit(20);
     }
     if (req.params.typeLeader == "total") {
+      const filter = {};
       cursor = await learnProcess.find(filter).sort({ totalExp: -1 }).limit(20);
     }
 
