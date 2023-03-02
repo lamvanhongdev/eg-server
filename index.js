@@ -40,8 +40,12 @@ const courseRoute = require("./routes/course");
 app.use("/api/course/", courseRoute);
 
 // lesson
-const lessonRoute = require("./routes/lession");
+const lessonRoute = require("./routes/lesson");
 app.use("/api/lesson/", lessonRoute);
+
+// user lesson
+const userlesson = require("./routes/userLesson");
+app.use("/api/userlesson", userlesson);
 
 // If any depreciation warning add depreciation options
 // mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true }, () => {

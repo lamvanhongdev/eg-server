@@ -27,6 +27,11 @@ const WordSchema = mongoose.Schema(
       required: true,
       default: "en-vi",
     },
+    lesson: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "lesson",
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,9 +1,9 @@
-const lession = require("../models/lession");
+const lesson = require("../models/lesson");
 const router = require("express").Router();
 
 router.get("/getall", async (req, res) => {
   try {
-    const cursor = await lession.find();
+    const cursor = await lesson.find();
     return res.status(200).json({
       success: true,
       data: cursor,
@@ -13,17 +13,17 @@ router.get("/getall", async (req, res) => {
 
 router.post("/save", async (req, res) => {
   try {
-    const newLession = lession({
+    const newLesson = lesson({
       name: req.body.name,
       course: req.body.courseId,
       index: req.body.index,
     });
-    const savedLession = await newLession.save();
-    if (savedLession) {
+    const savedLesson = await newLesson.save();
+    if (savedLesson) {
       return res.status(200).json({
         success: true,
         msg: "save successfully!",
-        savedLession,
+        savedLesson,
       });
     } else {
       return res.status(200).json({
@@ -41,7 +41,7 @@ router.post("/save", async (req, res) => {
 
 router.delete("/delete/:deleteId", async (req, res) => {
   try {
-    const result = await lession.findByIdAndDelete(req.params.deleteId);
+    const result = await lesson.findByIdAndDelete(req.params.deleteId);
     if (result) {
       return res.status(200).json({
         success: true,

@@ -104,6 +104,26 @@ router.post("/save", async (req, res) => {
   }
 });
 
+router.put("/updateAllWord", async (req, res) => {
+  try {
+    const cursor = await word.find();
+    for (let i = 0; i < 10; i++) {
+      const newData = { ...cursor[i]._doc, lesson: req.body.lessonId };
+      const savedNewData = await word.findByIdAndUpdate(cursor[i]._id, newData);
+    }
+    return res.status(200).json({
+      success: true,
+      msg: "update successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "server has problem",
+      error,
+    });
+  }
+});
+
 router.delete("/delete/:deleteId", async (req, res) => {
   const filter = { _id: req.params.deleteId };
 

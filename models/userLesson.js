@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
-const LessionSchema = mongoose.Schema(
+const userLesson = mongoose.Schema(
   {
-    name: {
-      type: String,
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
       required: true,
+      ref: "user",
     },
     course: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
+      ref: "course",
     },
     index: {
       type: Number,
-      unique: true,
+      default: 0,
     },
   },
   {
@@ -20,4 +22,4 @@ const LessionSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("lession", LessionSchema);
+module.exports = mongoose.model("userlesson", userLesson);
