@@ -35,6 +35,14 @@ app.use("/api/learnwords/", learnWordRoute);
 const learnProcess = require("./routes/learnProcess");
 app.use("/api/learnProcess/", learnProcess);
 
+// course
+const courseRoute = require("./routes/course");
+app.use("/api/course/", courseRoute);
+
+// lesson
+const lessonRoute = require("./routes/lession");
+app.use("/api/lesson/", lessonRoute);
+
 // If any depreciation warning add depreciation options
 // mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true }, () => {
 //   console.log("Mongodb Connected");
