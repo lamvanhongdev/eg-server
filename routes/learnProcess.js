@@ -210,6 +210,24 @@ router.put("/updateAll", async (req, res) => {
   }
 });
 
+router.post("/updateCourse", async (req, res) => {
+  try {
+    const updatedData = await learnProcess.findByIdAndUpdate(req.body.userId, {
+      $set: {
+        course: req.body.courseId,
+      },
+    });
+    if (updatedData) {
+      return res.status(200).json(updatedData);
+    } else
+      return res.status(200).json({
+        success: false,
+      });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+
 router.delete("/delete/:deleteId", async (req, res) => {
   try {
     const result = await learnProcess.deleteOne({
