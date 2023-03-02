@@ -12,6 +12,25 @@ router.get("/getall", async (req, res) => {
     return res.status(500).json({ err });
   }
 });
+router.post("/getActiveCourse", async (req, res) => {
+  try {
+    const filter = {
+      status: true,
+    };
+
+    const cursor = await course.find(filter);
+    return res.status(200).json({
+      success: true,
+      data: cursor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "server has problem",
+      error,
+    });
+  }
+});
 router.post("/save", async (req, res) => {
   try {
     const newCourse = course({

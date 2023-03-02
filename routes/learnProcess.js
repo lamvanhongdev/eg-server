@@ -190,6 +190,26 @@ router.get("/getall", async (req, res) => {
   }
 });
 
+router.put("/updateAll", async (req, res) => {
+  try {
+    const cursor = await learnProcess.find();
+    for (let i = 0; i < cursor.length; i++) {
+      const newData = { ...cursor[i]._doc, course: req.body.courseId };
+      await learnProcess.findByIdAndUpdate(cursor[i]._id, newData);
+    }
+    return res.status(200).json({
+      success: true,
+      msg: "update data successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: true,
+      msg: "server has problem",
+      error,
+    });
+  }
+});
+
 router.delete("/delete/:deleteId", async (req, res) => {
   try {
     const result = await learnProcess.deleteOne({

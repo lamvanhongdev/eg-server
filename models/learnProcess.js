@@ -36,6 +36,10 @@ const LearnProcessSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    course: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "course",
+    },
   },
   {
     timestampt: true,
