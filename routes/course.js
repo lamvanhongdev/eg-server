@@ -42,3 +42,5 @@ router.delete("/delete/:deleteId", async (req, res) => {
     }
   } catch (error) {}
 });
+
+module.exports = router;

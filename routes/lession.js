@@ -16,8 +16,27 @@ router.post("/save", async (req, res) => {
     const newLession = lession({
       name: req.body.name,
       course: req.body.courseId,
+      index: req.body.index,
     });
-  } catch (error) {}
+    const savedLession = await newLession.save();
+    if (savedLession) {
+      return res.status(200).json({
+        success: true,
+        msg: "save successfully!",
+        savedLession,
+      });
+    } else {
+      return res.status(200).json({
+        success: false,
+        msg: "cant save",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error,
+    });
+  }
 });
 
 router.delete("/delete/:deleteId", async (req, res) => {
@@ -35,3 +54,5 @@ router.delete("/delete/:deleteId", async (req, res) => {
       });
   } catch (error) {}
 });
+
+module.exports = router;
