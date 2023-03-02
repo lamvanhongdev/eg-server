@@ -48,7 +48,7 @@ router.post("/getCourseLesson", async (req, res) => {
     });
     const result = [];
 
-    for (let i = 0; i <= req.body.index; i++) {
+    for (let i = 0; i < cursor.length; i++) {
       const wordInLesson = await word.find({
         lesson: cursor[i]._id,
       });
