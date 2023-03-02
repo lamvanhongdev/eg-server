@@ -39,6 +39,24 @@ router.post("/save", async (req, res) => {
   }
 });
 
+router.post("/getCourseLesson/:courseId", async (req, res) => {
+  try {
+    const result = await lesson.find({
+      course: req.params.courseId,
+    });
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "server has problem",
+      error,
+    });
+  }
+});
+
 router.delete("/delete/:deleteId", async (req, res) => {
   try {
     const result = await lesson.findByIdAndDelete(req.params.deleteId);
