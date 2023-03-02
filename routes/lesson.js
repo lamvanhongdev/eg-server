@@ -1,4 +1,6 @@
+const learnWord = require("../models/learnWord");
 const lesson = require("../models/lesson");
+const word = require("../models/word");
 const router = require("express").Router();
 
 router.get("/getall", async (req, res) => {
@@ -39,11 +41,34 @@ router.post("/save", async (req, res) => {
   }
 });
 
-router.post("/getCourseLesson/:courseId", async (req, res) => {
+router.post("/getCourseLesson", async (req, res) => {
   try {
-    const result = await lesson.find({
-      course: req.params.courseId,
+    const cursor = await lesson.find({
+      course: req.body.courseId,
     });
+    const result = [];
+
+    for (let i = 0; i <= req.body.index; i++) {
+      const wordInLesson = await word.find({
+        lesson: cursor[i]._id,
+      });
+      if (wordInLesson) console.log(wordInLesson.length);
+
+      let count = 0; // count word learn by userId and word in lesson
+      for (let i = 0; i < wordInLesson.length; i++) {
+        const currLearnWord = await learnWord.findOne({
+          word: wordInLesson[i]._id,
+          user: req.body.userId,
+        });
+        if (currLearnWord) count++;
+      }
+      console.log(count);
+      result.push({
+        ...cursor[i]._doc,
+        totalWord: wordInLesson.length,
+        learnedWord: count,
+      });
+    }
     return res.status(200).json({
       success: true,
       data: result,
