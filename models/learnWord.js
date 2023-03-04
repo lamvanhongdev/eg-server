@@ -20,6 +20,10 @@ const LearnWordSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    gameScore: {
+      type: Number,
+      default: 0,
+    },
     result: [
       {
         learnType: String,

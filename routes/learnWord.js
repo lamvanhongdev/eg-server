@@ -126,6 +126,34 @@ router.delete("/deleteAll", async (req, res) => {
     });
   }
 });
+router.post("/updateGameScore", async (req, res) => {
+  try {
+    const updatedData = await LearnWord.findByIdAndUpdate(
+      req.body.id,
+      {
+        gameScore: req.body.gameScore,
+        totalScore: req.body.totalScore,
+      },
+      { upsert: true, new: true }
+    );
+    if (updatedData) {
+      return res.status(200).json({
+        success: true,
+        msg: "update gameScore successfully",
+        updatedData,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error,
+    });
+  }
+});
 
 router.post("/save", async (req, res) => {
   const newData = new LearnWord(req.body);
