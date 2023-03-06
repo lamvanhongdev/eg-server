@@ -1,5 +1,6 @@
 const word = require("../models/word");
 const LearnWord = require("../models/learnWord");
+const learnProcess = require("../models/learnProcess");
 
 const router = require("express").Router();
 
@@ -19,7 +20,29 @@ router.get("/getAll", async (req, res) => {
     });
   }
 });
+router.get("/getAllInLesson/:lessonId", async (req, res) => {
+  if (req.params.lessonId.length < 10)
+    return res.status(400).json({
+      success: false,
+      msg: "input correct lessonID",
+    });
+  const options = {
+    lesson: req.params.lessonId,
+  };
 
+  const cursor = await word.find(options);
+  if (cursor) {
+    res.status(200).json({
+      success: true,
+      data: cursor,
+    });
+  } else {
+    res.status(200).json({
+      success: true,
+      msg: "No data found",
+    });
+  }
+});
 router.get("/learning", async (req, res) => {
   //const cursor = await word.find().sort({ datefield: 1 }).limit(4);
   const cursor = await word.aggregate([{ $sample: { size: 4 } }]);
@@ -50,8 +73,21 @@ router.post("/getlearning", async (req, res) => {
     if (!req.body.maxWord) {
       req.body.maxWord = 6;
     }
+    // get current courseId from user
+    const learnProcessData = await learnProcess.findOne({
+      user: req.body.userId,
+    });
+    if (!learnProcessData) {
+      return res.status(200).json({
+        success: false,
+        msg: "User have not choose course!",
+      });
+    }
+
     const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
-    const allWord = await word.find();
+    const allWord = await word.find({
+      course: learnProcessData.course,
+    });
     const learnWords = [];
     for (var i = 0; i < allWord.length; i++) {
       if (learnWords.length >= req.body.maxWord) break;
@@ -87,6 +123,7 @@ router.post("/save", async (req, res) => {
     imageUrl: req.body.imageUrl,
     sound: req.body.sound,
     type: req.body.type || "en-vi",
+    lesson: req.body.lessonId,
   });
 
   try {
