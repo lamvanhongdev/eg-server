@@ -100,7 +100,7 @@ router.post("/getlearning", async (req, res) => {
         allWord.push(temptData);
       }
     }
-    return res.json(allWord);
+
     const learnWords = [];
     for (var i = 0; i < allWord.length; i++) {
       if (learnWords.length >= req.body.maxWord) break;
