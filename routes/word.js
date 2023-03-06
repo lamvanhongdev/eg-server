@@ -85,9 +85,22 @@ router.post("/getlearning", async (req, res) => {
     }
 
     const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
-    const allWord = await word.find({
-      course: learnProcessData.course,
+    const allcursorWord = await word.find().populate({
+      path: "lesson",
+      match: { course: learnProcessData.course },
     });
+
+    const allWord = [];
+    for (var i = 0; i < allcursorWord.length; i++) {
+      if (allcursorWord[i].lesson != null) {
+        const temptData = {
+          ...allcursorWord[i]._doc,
+          lesson: allcursorWord[i].lesson._id,
+        };
+        allWord.push(temptData);
+      }
+    }
+    return res.json(allWord);
     const learnWords = [];
     for (var i = 0; i < allWord.length; i++) {
       if (learnWords.length >= req.body.maxWord) break;
