@@ -1,3 +1,4 @@
+const learnProcess = require("../models/learnProcess");
 const LearnWord = require("../models/learnWord");
 const word = require("../models/word");
 
@@ -80,16 +81,52 @@ router.post("/getpractice", async (req, res) => {
     if (!req.body.maxWord) {
       req.body.maxWord = 6;
     }
+
+    // get current courseId from user
+    const learnProcessData = await learnProcess.findOne({
+      user: req.body.userId,
+    });
+    if (!learnProcessData) {
+      return res.status(200).json({
+        success: false,
+        msg: "User have not choose course!",
+      });
+    }
+
     const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
-    const allLearnWord = await LearnWord.find({
+    // const allLearnWord = await LearnWord.find({
+    //   user: req.body.userId,
+    // }).sort({
+    //   totalScore: 1,
+    // });
+
+    const allLearnWordCursor = await LearnWord.find({
       user: req.body.userId,
     })
+      .populate({
+        path: "word",
+        populate: {
+          path: "lesson",
+          match: { course: learnProcessData.course },
+        },
+      })
       .sort({
         totalScore: 1,
-      })
-      .limit(req.body.maxWord);
+      });
+
+    const allLearnWord = [];
+    for (var i = 0; i < allLearnWordCursor.length; i++) {
+      if (allLearnWordCursor[i].word.lesson != null) {
+        const temptData = {
+          ...allLearnWordCursor[i]._doc,
+          word: allLearnWordCursor[i].word._id,
+        };
+        allLearnWord.push(temptData);
+      }
+    }
+
     const learnWords = [];
-    for (var i = 0; i < allLearnWord.length; i++) {
+    for (var i = 0; i < 6; i++) {
       const currWord = await word.findOne({
         _id: allLearnWord[i].word,
       });
@@ -104,6 +141,7 @@ router.post("/getpractice", async (req, res) => {
       randomWord: randomCursor,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       success: false,
       msg: err,
