@@ -11,9 +11,11 @@ const LessonSchema = mongoose.Schema(
       ref: "course",
       required: true,
     },
+
     index: {
       type: Number,
-      unique: true,
+      required: false,
+      unique: false,
     },
   },
   {

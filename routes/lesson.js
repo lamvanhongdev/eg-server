@@ -12,6 +12,21 @@ router.get("/getall", async (req, res) => {
     });
   } catch (error) {}
 });
+router.get("/getlesson/:id", async (req, res) => {
+  try {
+    const cursor = await lesson.find({
+      course: req.params.id,
+    });
+    return res.status(200).json({
+      success: true,
+      data: cursor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error,
+    });
+  }
+});
 
 router.post("/save", async (req, res) => {
   try {
@@ -34,6 +49,7 @@ router.post("/save", async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       msg: error,
