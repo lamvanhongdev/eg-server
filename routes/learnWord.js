@@ -126,7 +126,7 @@ router.post("/getpractice", async (req, res) => {
     }
 
     const learnWords = [];
-    const maxword = 6;
+    var maxword = 6;
     if (req.body.maxWord != null) maxword = req.body.maxWord;
     for (var i = 0; i < maxword; i++) {
       const currWord = await word.findOne({
