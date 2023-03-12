@@ -89,6 +89,44 @@ router.post("/mobilelogin", async (req, res) => {
   }
 });
 
+router.post("/update", async (req, res) => {
+  try {
+    const existUser = await user.findOne({
+      user_id: req.body.user_id,
+    });
+    console.log(req.body.name);
+    const newData = {
+      name: req.body.name || existUser.name,
+      imageURL: req.body.imageUrl || existUser.imageURL,
+    };
+    const updateData = await user.findOneAndUpdate(
+      { user_id: req.body.user_id },
+      newData,
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+    if (updateData) {
+      return res.status(200).json({
+        success: true,
+        msg: "update gameScore successfully",
+        updateData,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      msg: err,
+    });
+  }
+});
+
 router.put("/favourites/:userId", async (req, res) => {
   const filter = { _id: req.params.userId };
   const songId = req.query;
