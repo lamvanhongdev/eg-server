@@ -26,8 +26,10 @@ router.post("/getLeaderBoard/:typeLeader", async (req, res) => {
     }
 
     const resultData = [];
+    var hasUser = false;
     for (var i = 0; i < cursor.length; i++) {
       const currUser = await user.findOne({ _id: cursor[i].user });
+      if (currUser._id == req.body.userId) hasUser = true;
       const currData = {
         ...cursor[i]._doc,
         imageUrl: currUser.imageURL,
@@ -36,12 +38,25 @@ router.post("/getLeaderBoard/:typeLeader", async (req, res) => {
 
       resultData.push(currData);
     }
+    if (!hasUser) {
+      const fetchUser = await user.findById(req.body.userId);
+      const fetchUserLearn = await learnProcess.findOne({
+        user: req.body.userId,
+      });
+      const userData = {
+        imageUrl: fetchUser.imageURL,
+        name: fetchUser.name,
+        ...fetchUserLearn._doc,
+      };
+      resultData.push(userData);
+    }
 
     return res.status(200).json({
       success: true,
       data: resultData,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       success: false,
       msg: "server has problem",
