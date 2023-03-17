@@ -154,6 +154,90 @@ router.post("/getpractice", async (req, res) => {
   }
 });
 
+router.post("/getpracticeInLesson", async (req, res) => {
+  // req include: userid,maxWord, lessonId
+  try {
+    if (req.body.userId == null)
+      return res.status(401).json({
+        success: false,
+        msg: "missing userID",
+      });
+    if (!req.body.maxWord) {
+      req.body.maxWord = 6;
+    }
+
+    // get current courseId from user
+    const learnProcessData = await learnProcess.findOne({
+      user: req.body.userId,
+    });
+    if (!learnProcessData) {
+      return res.status(200).json({
+        success: false,
+        msg: "User have not choose course!",
+      });
+    }
+
+    const randomCursor = await word.aggregate([{ $sample: { size: 6 } }]);
+    // const allLearnWord = await LearnWord.find({
+    //   user: req.body.userId,
+    // }).sort({
+    //   totalScore: 1,
+    // });
+
+    const allLearnWordCursor = await LearnWord.find({
+      user: req.body.userId,
+    })
+      .populate({
+        path: "word",
+        populate: {
+          path: "lesson",
+          match: { course: learnProcessData.course, _id: req.body.lessonId },
+        },
+      })
+      .sort({
+        totalScore: 1,
+      });
+
+    const allLearnWord = [];
+    for (var i = 0; i < allLearnWordCursor.length; i++) {
+      if (allLearnWordCursor[i].word.lesson != null) {
+        const temptData = {
+          ...allLearnWordCursor[i]._doc,
+          word: allLearnWordCursor[i].word._id,
+        };
+        allLearnWord.push(temptData);
+      }
+    }
+
+    const learnWords = [];
+    var maxword = 6;
+    if (req.body.maxWord != null) maxword = req.body.maxWord;
+    if (maxword >= allLearnWord.length) {
+      maxword = allLearnWord.length;
+    }
+    for (var i = 0; i < maxword; i++) {
+      const currWord = await word.findOne({
+        _id: allLearnWord[i].word,
+      });
+      learnWords.push({
+        word: currWord,
+        learnWord: allLearnWord[i],
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      data: learnWords,
+      randomWord: randomCursor,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      msg: err,
+    });
+  }
+});
+
 router.delete("/deleteAll", async (req, res) => {
   try {
     const result = await LearnWord.deleteMany();
