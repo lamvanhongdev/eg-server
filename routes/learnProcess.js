@@ -115,7 +115,7 @@ router.post("/updateExp", async (req, res) => {
         if (!decodeData[decodeData.length - 1] == lastDay) {
           if (decodeData.length > 1) {
             if (
-              GetLastDay(getPreviousDay(1)) == decodeData[decodeData.length - 2]
+              GetLastDay(getPreviousDay(1)) == decodeData[decodeData.length - 1]
             ) {
               newData.streak = newData.streak + 1;
               newData.streakData = newData.streakData + " " + lastDay;
