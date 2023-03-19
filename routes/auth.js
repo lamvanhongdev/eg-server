@@ -94,10 +94,11 @@ router.post("/update", async (req, res) => {
     const existUser = await user.findOne({
       user_id: req.body.user_id,
     });
-    console.log(req.body.name);
     const newData = {
       name: req.body.name || existUser.name,
       imageURL: req.body.imageUrl || existUser.imageURL,
+      subcribe: req.body.subcribe || existUser.subcribe,
+      daySubcribe: req.body.daySubcribe || existUser.daySubcribe,
     };
     const updateData = await user.findOneAndUpdate(
       { user_id: req.body.user_id },

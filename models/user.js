@@ -23,6 +23,14 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    subcribe: {
+      type: String,
+      default: "no",
+    },
+    daySubcribe: {
+      type: String,
+      default: "",
+    },
 
     favourites: [
       {
