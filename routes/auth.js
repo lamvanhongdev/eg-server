@@ -59,7 +59,7 @@ router.post("/mobilelogin", async (req, res) => {
       const newUser = new user({
         name: req.body.name,
         email: req.body.email,
-        imageURL: req.body.imageUrl,
+        imageURL: req.body.imageURL,
         user_id: req.body.user_id,
         email_verfied: req.body.email_verified,
         role: "member",
