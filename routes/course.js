@@ -31,6 +31,34 @@ router.post("/getActiveCourse", async (req, res) => {
     });
   }
 });
+router.put("/update/:id", async (req, res) => {
+  try {
+    const updatedCourse = await course.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+    if (updatedCourse) {
+      return res.status(200).json({
+        success: true,
+        updatedCourse,
+      });
+    } else {
+      return res.status(200).json({
+        success: false,
+        msg: "cant update",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error,
+    });
+  }
+});
 router.post("/save", async (req, res) => {
   try {
     const newCourse = course({
